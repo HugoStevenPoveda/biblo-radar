@@ -1,0 +1,3 @@
+url1=https://datosabiertos.bogota.gov.co/dataset/386b3a77-351e-43b7-9be8-e73db1396c22/resource/9f072e13-0662-4922-bfc8-dbab006dd569/download/bibiotecapublica.json
+url2=https://datosabiertos.bogota.gov.co/dataset/79da0f09-016d-4fe6-892f-741c36843d28/resource/bee49b31-f45a-4caf-ae90-b2c330906553/download/redbibliotecascomunitarias.geojson
+url3=https://datosabiertos.bogota.gov.co/dataset/a7929519-0eb5-4a95-b422-d7632946cd7e/resource/cf579759-0bef-4f1c-b99e-bc04d741b614/download/paraderoparalibrosparaparque.json
