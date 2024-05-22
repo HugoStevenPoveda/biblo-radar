@@ -1,7 +1,8 @@
+
 import sys
 sys.path.append(r'src/app_biblio/')
-from fastapi import APIRouter
 from services.BilbiotecaService import BibliotecaService
+from fastapi import APIRouter
 
 
 biblioteca = APIRouter()
@@ -16,3 +17,8 @@ async def get_bibliotecas():
 @biblioteca.get('/bibliotecas/{id_libro}')
 async def get_bibliotecas(id_libro):
     return biblioteca_service.get_bibliotecas_by_id_libro(id_libro)
+
+
+@biblioteca.get('/bibliotecas/{id_libro}/{longitud}/{latitud}')
+async def get_bibliotecas(id_libro, longitud, latitud):
+    return biblioteca_service.get_bibliotecas_by_id_libro_coordenada(id_libro, longitud, latitud)

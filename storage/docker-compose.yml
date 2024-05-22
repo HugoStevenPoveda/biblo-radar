@@ -27,6 +27,7 @@ services:
       - some-network
     volumes:
       - ./data.sql:/docker-entrypoint-initdb.d/script.sql
+      - postgis_data:/var/lib/postgresql/data
   
   pgadmin:
     image: dpage/pgadmin4
@@ -38,6 +39,11 @@ services:
       - "8080:80"
     networks:
       - some-network
+
+volumes:
+  postgis_data:
+    driver: local
+
 networks:
   some-network:
     driver: bridge
