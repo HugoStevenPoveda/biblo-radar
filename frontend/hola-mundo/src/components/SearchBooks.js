@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import ListaLibros from './ListaLibros';
 import MapView from './MapView';
 import Header from './Header';
 import ListAccordion from './ListAccordion';
@@ -27,7 +26,7 @@ function SearchBooks() {
             const response = await axios.get(`http://localhost:8000/libro/${query}`);
             setResults(response.data);
         } catch (err) {
-            setError('Error fetching data. Please try again.');
+            setError('Ingresa el nombre de algún libro.');
         } finally {
             setLoading(false);
         }
@@ -40,9 +39,10 @@ function SearchBooks() {
                     const { latitude, longitude } = position.coords;
                     try {
                         const url = `http://localhost:8000/bibliotecas/${libroId}/${longitude}/${latitude}`;
+                        console.log(url);
                         const response = await axios.get(url);
-                         setLibraries(response.data);
-                        
+                        setLibraries(response.data);
+
                     } catch (err) {
                         console.error("Error en la petición:", err);
                     }
@@ -57,18 +57,21 @@ function SearchBooks() {
     };
 
     return (
-      
-            <Container>
-                <Row>
-                    <Col>
-                        <Header />
-                    </Col>
 
-                </Row>
-                <Row>
-                    <Col>
+        <Container>
+            <Row className="mb-3">
+                <Col >
 
-                        <h3>Buscar Libro Deseado</h3>
+                    <Header />
+
+
+                </Col>
+
+            </Row>
+            <Row className="mb-3">
+                <Col className="text-center">
+                    <div  className='mx-auto p-3'>
+                        <h3 >Buscar Libro Deseado</h3>
                         <form onSubmit={handleSearch}>
                             <input
                                 type="text"
@@ -80,25 +83,27 @@ function SearchBooks() {
                         </form>
                         {loading && <p>Cargando...</p>}
                         {error && <p>{error}</p>}
-
-
+                    </div>
+                    <div>
                         <ListAccordion libros={results} onSelectLibrary={handleSelectLibrary} />
-
-                    </Col>
-
-                    <Col>
-
-                        <MapView libraries={libraries} />
-                    </Col>
-                </Row>
-            </Container>
+                    </div>
 
 
+                </Col>
+
+                <Col>
+
+                    <MapView libraries={libraries} />
+                </Col>
+            </Row>
+        </Container>
 
 
 
 
-      
+
+
+
     );
 }
 

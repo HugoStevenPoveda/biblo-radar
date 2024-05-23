@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
 import axios from 'axios';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 // Importar los archivos de iconos locales
 import blueMarkerIcon from '../assets/images/blue-marker-icon.png';
@@ -30,6 +32,7 @@ const MapView = ({ libraries = [], userLatitud = 4.666198, userLongitud = -74.07
     const [defaultPosition, setDefaultPosition] = useState([userLatitud, userLongitud]);
     const [route, setRoute] = useState([]);
     const [positionObtained, setPositionObtained] = useState(false);
+    const [libraryInfo, setLibraryInfo] = useState(null);
 
     useEffect(() => {
         if ("geolocation" in navigator) {
@@ -41,12 +44,36 @@ const MapView = ({ libraries = [], userLatitud = 4.666198, userLongitud = -74.07
         }
     }, []);
 
+
+    const  handleClick =  async  (library_id) => {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!");
+       
+       
+          try {
+            const response = await axios.get(`http://localhost:8000/bibliotecas`); 
+            setLibraryInfo(response.data); 
+            console.log(response.data);
+          } catch (error) {
+            console.error('Error al obtener la información de la biblioteca:', error);
+          }
+        
+      };
+    
+
+
+
+
+
     const getRoute = async (start, end) => {
-        const apiKey = '5b3ce3597851110001cf62483e340096ecb74c7cb51297c73ab54330'; // Reemplaza con tu clave de OpenRouteService
-        const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start}&end=${end}`;
+        //const apiKey = '5b3ce3597851110001cf6248025237e292724238a88897c43b50327c'; // Reemplaza con tu clave de OpenRouteService
+         const apiKey = '5aaaaaaaa'; // Reemplaza con tu clave de OpenRouteService
+         const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start}&end=${end}`;
+    
+
 
         try {
             const response = await axios.get(url);
+
             const coordinates = response.data.features[0].geometry.coordinates;
             const routePoints = coordinates.map(coord => [coord[1], coord[0]]);
             setRoute(routePoints);
@@ -74,21 +101,36 @@ const MapView = ({ libraries = [], userLatitud = 4.666198, userLongitud = -74.07
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
+
                     <Marker position={defaultPosition} icon={blueIcon}>
                         <Popup>Tu posición actual</Popup>
                     </Marker>
                     {libraries.map(library => (
                         <Marker
-                            key={library.id}
-                            position={[parseFloat(library.latitud), parseFloat(library.longitud)]}
-                            icon={redIcon}
-                        >
-                            <Popup>
-                                {library.nombre}
-                                <br />
-                                Distancia: {library.distancia.toFixed(2)} metros
-                            </Popup>
-                        </Marker>
+                        position={[parseFloat(library.latitud), parseFloat(library.longitud)]}
+                        icon={redIcon} 
+                      >
+                        {
+                          <Popup >
+                            <Card>
+                              <Card.Body>
+                                <Card.Title>{library.nombre}</Card.Title>
+                                <Card.Text>
+                                  Distancia: {library.distancia.toFixed(2)} metros
+                                </Card.Text>
+                                {
+                                  <div>
+                                    {/* Aquí muestras la información adicional obtenida de la solicitud GET */}
+                                    <p>Otra información: </p>
+                                  </div>
+                                }
+                               <Button variant="primary" onClick={() => handleClick(library.id)}>Más información</Button>
+
+                              </Card.Body>
+                            </Card>
+                          </Popup>
+                        }
+                      </Marker>
                     ))}
                     {route.length > 0 && <Polyline positions={route} color="blue" />}
                 </MapContainer>
