@@ -42,14 +42,14 @@ services:
       - some-network
 
   backend:
-    image: fast-app:latest
+    image: hugostevenpoveda692/fast-app:latest
     container_name: fastapp
     ports: 
       - "8000:8000"
     networks:
       - some-network
   frontend:
-    image: biblo-radar:latest
+    image: hugostevenpoveda692/biblo-radar:latest
     container_name: reactapp
     ports: 
       - "3000:3000"
@@ -57,7 +57,7 @@ services:
       - some-network
 
   apivectorial:
-    image: api-vectorial:latest
+    image: hugostevenpoveda692/api-vectorial:lates
     container_name: appvectorial
     ports: 
       - "7000:7000"
@@ -65,13 +65,13 @@ services:
       - some-network
       
   scripts:
-    image: app-script:latest
+    image: hugostevenpoveda692/app-script:latest
     container_name: scriptapp
     networks:
       - some-network
 
   scriptsloads:
-    image: load-script:latest
+    image: hugostevenpoveda692/load-script:latest
     container_name: scriptapploads
     networks:
       - some-network
