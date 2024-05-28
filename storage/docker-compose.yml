@@ -1,7 +1,7 @@
 services:
 
   minio:
-    image: minio/minio:RELEASE.2023-12-23T07-19-11Z-cpuv1 
+    image: minio/minio:RELEASE.2023-12-23T07-19-11Z-cpuv1
     container_name: minio
     environment:
       - MINIO_ROOT_USER=User
@@ -9,6 +9,8 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    networks:
+      - some-network
     restart: unless-stopped
     volumes:
       - ./minio_data:/data
@@ -20,7 +22,6 @@ services:
     restart: always
     env_file:
       - local.env
-    
     ports:
       - "5432:5432"
     networks:
@@ -28,7 +29,7 @@ services:
     volumes:
       - ./data.sql:/docker-entrypoint-initdb.d/script.sql
       - postgis_data:/var/lib/postgresql/data
-  
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -40,7 +41,46 @@ services:
     networks:
       - some-network
 
+  backend:
+    image: fast-app:latest
+    container_name: fastapp
+    ports: 
+      - "8000:8000"
+    networks:
+      - some-network
+  frontend:
+    image: biblo-radar:latest
+    container_name: reactapp
+    ports: 
+      - "3000:3000"
+    networks:
+      - some-network
+
+  apivectorial:
+    image: api-vectorial:latest
+    container_name: appvectorial
+    ports: 
+      - "7000:7000"
+    networks:
+      - some-network
+      
+  scripts:
+    image: app-script:latest
+    container_name: scriptapp
+    networks:
+      - some-network
+
+  scriptsloads:
+    image: load-script:latest
+    container_name: scriptapploads
+    networks:
+      - some-network
+  
+  
+
 volumes:
+  index_data:
+    driver: local
   postgis_data:
     driver: local
 
